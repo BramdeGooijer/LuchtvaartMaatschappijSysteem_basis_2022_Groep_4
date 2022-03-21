@@ -30,7 +30,7 @@ public class VluchtTest {
 			datum.set(2000, 01, 01);
 			vt1 = new Vliegtuig(lvm, vtt1, "Luchtbus 100", datum);
 			Land l1 = new Land("Nederland", 31);
-			Land l2 = new Land("Belgi�", 32);
+			Land l2 = new Land("België", 32);
 			lh1 = new Luchthaven("Schiphol", "ASD", true, l1);
 			lh2 = new Luchthaven("Tegel", "TEG", true, l2);
 			Calendar vertr = Calendar.getInstance();
@@ -205,7 +205,7 @@ public class VluchtTest {
 			Calendar vertrektijd = Calendar.getInstance();
 			Calendar aankomsttijd = Calendar.getInstance();
 			aankomsttijd.add(Calendar.MINUTE, 1);
-			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=Belgi�, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
+			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=Belgiï¿½, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
 		}catch(IllegalArgumentException e){
 
 		}
@@ -213,7 +213,7 @@ public class VluchtTest {
 
 	/**
 	 * Business rule:
-	 * Een vliegtuig kan maar voor ��n vlucht tegelijk gebruikt worden.
+	 * Een vliegtuig kan maar voor ï¿½ï¿½n vlucht tegelijk gebruikt worden.
 	 */
 
 	@Test
@@ -351,20 +351,40 @@ public class VluchtTest {
 	@Test
 	public void test_18_VertrektijdOngeldig_False() {
 		// FOUTMELDING NA OK "Vetrektijd ongeldig"
+		Vlucht vlucht = new Vlucht();
 		try {
-
+			vlucht.zetVliegtuig(vt1);
+			vlucht.zetVertrekpunt(lh1);
+			vlucht.zetBestemming(lh2);
+			Calendar aankomst = Calendar.getInstance();
+			aankomst.set(2002, Calendar.OCTOBER, 11, 22, 0);
+			assert aankomst.before(Calendar.getInstance());
+			if(aankomst.before(Calendar.getInstance())){
+				throw new IllegalArgumentException("e");
+			}
 		}catch(IllegalArgumentException e){
-
+			System.out.println("vertrektijd ongeldig");
 		}
 	}
 
 	@Test
 	public void test_19_AankomsttijdOngeldig_False() {
 		// FOUTMELDING NA OK "Aankomsttijd ongeldig"
+		Vlucht vlucht = new Vlucht();
+
 		try {
+			vlucht.zetVliegtuig(vt1);
+			vlucht.zetVertrekpunt(lh1);
+			vlucht.zetBestemming(lh2);
+			Calendar vertrek = Calendar.getInstance();
+			vertrek.set(2002, Calendar.OCTOBER, 11, 22, 0);
+			assert vertrek.before(Calendar.getInstance());
+			if (vertrek.before(Calendar.getInstance())) {
+				throw new IllegalArgumentException("e");
 
+			}
 		}catch(IllegalArgumentException e){
-
+			System.out.println("Aankomsttijd ongeldig");
 		}
 	}
 
