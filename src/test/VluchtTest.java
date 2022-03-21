@@ -2,12 +2,12 @@ package test;
 
 import main.domeinLaag.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VluchtTest {
 
@@ -176,18 +176,31 @@ public class VluchtTest {
 	@Test
 	public void test_9_VertrektijdNaAankomsttijd_False() {
 		// FOUTMELDING "vertrektijd < aankomsttijd"
+		Vlucht vlucht = new Vlucht();
 		try {
-
-		}catch(IllegalArgumentException e){
-
+			vlucht.zetVliegtuig(vt1);
+			Calendar vertrek = Calendar.getInstance();
+			vertrek.add(Calendar.MINUTE, 5);
+			Calendar aankomst = Calendar.getInstance();
+			vlucht.zetVertrekTijd(vertrek);
+			vlucht.zetAankomstTijd(aankomst);
+			assertEquals("aankomsttijd voor vertrektijd", vlucht.getVertrekTijd());
+		}catch(IllegalArgumentException | VluchtException e){
+			assertEquals("main.domeinLaag.VluchtException: Aankomsttijd voor vertrektijd", e.toString());
 		}
 	}
 
 	@Test
 	public void test_10_VertrektijdVoorAankomsttijd_True() {
 		// GEEN foutmelding
+		Vlucht vlucht = new Vlucht();
 		try {
-
+			vlucht.zetVertrekpunt(lh1);
+			vlucht.zetBestemming(lh2);
+			Calendar vertrektijd = Calendar.getInstance();
+			Calendar aankomsttijd = Calendar.getInstance();
+			aankomsttijd.add(Calendar.MINUTE, 1);
+			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=België, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
 		}catch(IllegalArgumentException e){
 
 		}
