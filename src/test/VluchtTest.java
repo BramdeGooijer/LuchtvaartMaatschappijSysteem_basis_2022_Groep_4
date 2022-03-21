@@ -28,7 +28,7 @@ public class VluchtTest {
 			datum.set(2000, 01, 01);
 			vt1 = new Vliegtuig(lvm, vtt1, "Luchtbus 100", datum);
 			Land l1 = new Land("Nederland", 31);
-			Land l2 = new Land("België", 32);
+			Land l2 = new Land("Belgiï¿½", 32);
 			lh1 = new Luchthaven("Schiphol", "ASD", true, l1);
 			lh2 = new Luchthaven("Tegel", "TEG", true, l2);
 			Calendar vertr = Calendar.getInstance();
@@ -103,10 +103,13 @@ public class VluchtTest {
 			vlucht.zetVertrekpunt(lh1);
 			vlucht.zetBestemming(lh2);
 			Calendar vertrek = Calendar.getInstance();
-			vertrek.set(2025, 9, 31, 24, 0);
+			vertrek.set(2025, Calendar.SEPTEMBER, 31, 24, 0);
+			vlucht.zetVertrekTijd(vertrek);
+
+			assertFalse(vlucht.getVertrekTijd() == null);
 			assertFalse(vlucht.getAankomstTijd() == null);
-		}catch(IllegalArgumentException e){
-			assertFalse(vlucht.getAankomstTijd() == null);
+		}catch(VluchtException e){
+			assertEquals("main.domeinLaag.VluchtException: Geen geldig tijdstip!", e.toString());
 		}
 	}
 
@@ -120,18 +123,18 @@ public class VluchtTest {
 			vertrek.set(2025, Calendar.SEPTEMBER, 30, 12, 0);
 			aankomst.set(2025, Calendar.SEPTEMBER, 30, 12, 0);
 
-			vlucht.zetVliegtuig(vt1);
-			vlucht.zetVertrekpunt(lh1);
-			vlucht.zetBestemming(lh2);
-			//vlucht.zetVertrekTijd(vertrek);
-			//vlucht.zetAankomstTijd(aankomst);
+//			vlucht.zetVliegtuig(vt1);
+//			vlucht.zetVertrekpunt(lh1);
+//			vlucht.zetBestemming(lh2);
+//			vlucht.zetVertrekTijd(vertrek);
+//			vlucht.zetAankomstTijd(aankomst);
 
 			vlucht = new Vlucht(vt1, lh1, lh2, vertrek, aankomst);
-			assertTrue(vlucht.getAankomstTijd() != null);
-			assertTrue(vlucht.getVertrekTijd() != null);
+			assertNotNull(vlucht.getAankomstTijd());
+			assertNotNull(vlucht.getVertrekTijd());
 		}catch(IllegalArgumentException e){
-			assertTrue(vlucht.getAankomstTijd() != null);
-			assertTrue(vlucht.getVertrekTijd() != null);
+			assertNotNull(vlucht.getAankomstTijd());
+			assertNotNull(vlucht.getVertrekTijd());
 		}
 	}
 
@@ -176,18 +179,31 @@ public class VluchtTest {
 	@Test
 	public void test_9_VertrektijdNaAankomsttijd_False() {
 		// FOUTMELDING "vertrektijd < aankomsttijd"
+		Vlucht vlucht = new Vlucht();
 		try {
-
-		}catch(IllegalArgumentException e){
-
+			vlucht.zetVliegtuig(vt1);
+			Calendar vertrek = Calendar.getInstance();
+			vertrek.add(Calendar.MINUTE, 5);
+			Calendar aankomst = Calendar.getInstance();
+			vlucht.zetVertrekTijd(vertrek);
+			vlucht.zetAankomstTijd(aankomst);
+			assertEquals("aankomsttijd voor vertrektijd", vlucht.getVertrekTijd());
+		}catch(IllegalArgumentException | VluchtException e){
+			assertEquals("main.domeinLaag.VluchtException: Aankomsttijd voor vertrektijd", e.toString());
 		}
 	}
 
 	@Test
 	public void test_10_VertrektijdVoorAankomsttijd_True() {
 		// GEEN foutmelding
+		Vlucht vlucht = new Vlucht();
 		try {
-
+			vlucht.zetVertrekpunt(lh1);
+			vlucht.zetBestemming(lh2);
+			Calendar vertrektijd = Calendar.getInstance();
+			Calendar aankomsttijd = Calendar.getInstance();
+			aankomsttijd.add(Calendar.MINUTE, 1);
+			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=Belgiï¿½, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
 		}catch(IllegalArgumentException e){
 
 		}
@@ -195,7 +211,7 @@ public class VluchtTest {
 
 	/**
 	 * Business rule:
-	 * Een vliegtuig kan maar voor één vlucht tegelijk gebruikt worden.
+	 * Een vliegtuig kan maar voor ï¿½ï¿½n vlucht tegelijk gebruikt worden.
 	 */
 
 	@Test
