@@ -2,12 +2,12 @@ package test;
 
 import main.domeinLaag.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VluchtTest {
 
@@ -201,20 +201,41 @@ public class VluchtTest {
 	@Test
 	public void test_11_OverlappendeVluchtVertrektijdBinnen_False() {
 		// FOUTMELDING "overlappende vlucht"
+		Vlucht vlucht = new Vlucht();
 		try {
+			vlucht.zetVliegtuig(vt1);
+			Calendar vertrek = Calendar.getInstance();
+			Calendar aankomst = Calendar.getInstance();
+			vertrek.set(2020, 03, 30, 14, 35, 10);
+			aankomst.set(2020, 03, 30, 16, 36, 10);
+			vlucht.zetVertrekTijd(vertrek);
+			assertTrue(vlucht.getVertrekTijd() == null);
+			vlucht.zetAankomstTijd(aankomst);
 
-		}catch(IllegalArgumentException e){
-
+		} catch (VluchtException e) {
+			assertEquals("main.domeinLaag.VluchtException: Vliegtuig reeds bezet op Thu Apr 30 14:35:10 CEST 2020", e.toString());
 		}
 	}
 
 	@Test
 	public void test_12_OverlappendeVluchtAankomsttijdBinnen_False() {
 		// FOUTMELDING "overlappende vlucht"
+		Vlucht vlucht = new Vlucht();
 		try {
+			vlucht.zetVliegtuig(vt1);
+			Calendar vertrek = Calendar.getInstance();
+			Calendar aankomst = Calendar.getInstance();
+			vertrek.set(2020, 03, 30, 11, 36, 10);
+			aankomst.set(2020, 03, 30, 14, 30, 10);
+			vlucht.zetVertrekTijd(vertrek);
+			vlucht.zetAankomstTijd(aankomst);
 
-		}catch(IllegalArgumentException e){
+			assertEquals("main.domeinLaag.VluchtException: Vliegtuig reeds bezet op Thu Apr 30 14:30:10 CEST 2020", vlucht.getAankomstTijd());
 
+
+
+		}catch(IllegalArgumentException | VluchtException e) {
+			assertEquals("main.domeinLaag.VluchtException: Vliegtuig reeds bezet op Thu Apr 30 14:30:10 CEST 2020", e.toString());
 		}
 	}
 
