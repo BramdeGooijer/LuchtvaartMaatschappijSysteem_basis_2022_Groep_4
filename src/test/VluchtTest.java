@@ -2,12 +2,12 @@ package test;
 
 import main.domeinLaag.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VluchtTest {
 
@@ -28,7 +28,7 @@ public class VluchtTest {
 			datum.set(2000, 01, 01);
 			vt1 = new Vliegtuig(lvm, vtt1, "Luchtbus 100", datum);
 			Land l1 = new Land("Nederland", 31);
-			Land l2 = new Land("België", 32);
+			Land l2 = new Land("Belgiï¿½", 32);
 			lh1 = new Luchthaven("Schiphol", "ASD", true, l1);
 			lh2 = new Luchthaven("Tegel", "TEG", true, l2);
 			Calendar vertr = Calendar.getInstance();
@@ -103,10 +103,13 @@ public class VluchtTest {
 			vlucht.zetVertrekpunt(lh1);
 			vlucht.zetBestemming(lh2);
 			Calendar vertrek = Calendar.getInstance();
-			vertrek.set(2025, 9, 31, 24, 0);
-			assertFalse(vlucht.getAankomstTijd() == null);
+			vertrek.set(2025, Calendar.SEPTEMBER, 31, 24, 0);
+
+			assertNotNull(vlucht.getVertrekTijd());
+			assertNotNull(vlucht.getAankomstTijd());
 		}catch(IllegalArgumentException e){
-			assertFalse(vlucht.getAankomstTijd() == null);
+			assertNotNull(vlucht.getVertrekTijd());
+			assertNotNull(vlucht.getAankomstTijd());
 		}
 	}
 
@@ -120,18 +123,18 @@ public class VluchtTest {
 			vertrek.set(2025, Calendar.SEPTEMBER, 30, 12, 0);
 			aankomst.set(2025, Calendar.SEPTEMBER, 30, 12, 0);
 
-			vlucht.zetVliegtuig(vt1);
-			vlucht.zetVertrekpunt(lh1);
-			vlucht.zetBestemming(lh2);
-			//vlucht.zetVertrekTijd(vertrek);
-			//vlucht.zetAankomstTijd(aankomst);
+//			vlucht.zetVliegtuig(vt1);
+//			vlucht.zetVertrekpunt(lh1);
+//			vlucht.zetBestemming(lh2);
+//			vlucht.zetVertrekTijd(vertrek);
+//			vlucht.zetAankomstTijd(aankomst);
 
 			vlucht = new Vlucht(vt1, lh1, lh2, vertrek, aankomst);
-			assertTrue(vlucht.getAankomstTijd() != null);
-			assertTrue(vlucht.getVertrekTijd() != null);
+			assertNotNull(vlucht.getAankomstTijd());
+			assertNotNull(vlucht.getVertrekTijd());
 		}catch(IllegalArgumentException e){
-			assertTrue(vlucht.getAankomstTijd() != null);
-			assertTrue(vlucht.getVertrekTijd() != null);
+			assertNotNull(vlucht.getAankomstTijd());
+			assertNotNull(vlucht.getVertrekTijd());
 		}
 	}
 
@@ -195,7 +198,7 @@ public class VluchtTest {
 
 	/**
 	 * Business rule:
-	 * Een vliegtuig kan maar voor één vlucht tegelijk gebruikt worden.
+	 * Een vliegtuig kan maar voor ï¿½ï¿½n vlucht tegelijk gebruikt worden.
 	 */
 
 	@Test
