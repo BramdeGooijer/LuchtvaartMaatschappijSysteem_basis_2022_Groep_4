@@ -310,9 +310,20 @@ public class VluchtTest {
 	@Test
 	public void test_16_VertrekpuntOngeldig_False() {
 		// FOUTMELDING NA OK "Vertrekpunt ongeldig"
+	Vlucht vlucht = new Vlucht();
+
 		try {
 
-		}catch(IllegalArgumentException e){
+			vlucht.zetBestemming(lh2);
+			Calendar vertrektijd = Calendar.getInstance();
+			vlucht.zetVertrekTijd(vertrektijd);
+			Calendar aankomsttijd = Calendar.getInstance();
+			aankomsttijd.add(Calendar.MINUTE, 1);
+			assertTrue(vlucht.getVertrekPunt() == null);
+
+		} catch (VluchtException e) {
+
+			assertEquals("Vertrekpunt ongeldig", e.toString());
 
 		}
 	}
@@ -320,9 +331,19 @@ public class VluchtTest {
 	@Test
 	public void test_17_BestemmingOngeldig_False() {
 		// FOUTMELDING NA OK "Bestemming ongeldig"
+		Vlucht vlucht = new Vlucht();
 		try {
+			vlucht.zetVertrekpunt(lh1);
+			Calendar vertrektijd = Calendar.getInstance();
+			vlucht.zetVertrekTijd(vertrektijd);
+			Calendar aankomsttijd = Calendar.getInstance();
+			aankomsttijd.add(Calendar.MINUTE, 1);
 
-		}catch(IllegalArgumentException e){
+			assertTrue(vlucht.getBestemming() == null);
+
+		} catch (VluchtException e) {
+
+			assertEquals("Bestemming ongeldig", e.toString());
 
 		}
 	}
