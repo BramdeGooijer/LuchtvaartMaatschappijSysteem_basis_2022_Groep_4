@@ -111,32 +111,6 @@ public class VluchtTest {
 	}
 
 	@Test
-	public void test_4_GeenGeldigeTijdIngevuld_False() {
-		// FOUTMELDING "geen geldige datum/tijd"
-		Vlucht vlucht = new Vlucht();
-		Calendar datumFout = Calendar.getInstance();
-		datumFout.set(2025, Calendar.SEPTEMBER, 30, 23, 59);
-		try {
-			Calendar vertrek = Calendar.getInstance();
-			vertrek.set(2025, Calendar.SEPTEMBER, 30, 24, 0);
-			Calendar aankomst = Calendar.getInstance();
-			aankomst.set(2025, Calendar.SEPTEMBER, 30, 24, 1);
-
-			vlucht.zetVliegtuig(vt1);
-			vlucht.zetVertrekpunt(lh1);
-			vlucht.zetBestemming(lh2);
-			vlucht.zetVertrekTijd(vertrek);
-			vlucht.zetAankomstTijd(aankomst);
-
-			System.out.println(vlucht.getVertrekTijd());
-
-			assertFalse(vlucht.getAankomstTijd().after(datumFout));
-		} catch (VluchtException e) {
-			assertFalse(vlucht.getAankomstTijd().after(datumFout));
-		}
-	}
-
-	@Test
 	public void test_5_RegistreerVluchtMetGeldigeGegevens_True() {
 		// GEEN foutmelding
 		Vlucht vlucht = new Vlucht();
