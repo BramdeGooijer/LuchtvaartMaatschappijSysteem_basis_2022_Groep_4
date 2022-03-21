@@ -250,7 +250,6 @@ public class VluchtTest {
 
 			assertEquals("main.domeinLaag.VluchtException: Vliegtuig reeds bezet op Thu Apr 30 14:30:10 CEST 2020", vlucht.getAankomstTijd());
 
-		}catch(IllegalArgumentException e){
 
 
 		}catch(IllegalArgumentException | VluchtException e) {
