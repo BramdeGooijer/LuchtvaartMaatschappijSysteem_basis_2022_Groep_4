@@ -104,12 +104,12 @@ public class VluchtTest {
 			vlucht.zetBestemming(lh2);
 			Calendar vertrek = Calendar.getInstance();
 			vertrek.set(2025, Calendar.SEPTEMBER, 31, 24, 0);
+			vlucht.zetVertrekTijd(vertrek);
 
-			assertNotNull(vlucht.getVertrekTijd());
-			assertNotNull(vlucht.getAankomstTijd());
-		}catch(IllegalArgumentException e){
-			assertNotNull(vlucht.getVertrekTijd());
-			assertNotNull(vlucht.getAankomstTijd());
+			assertFalse(vlucht.getVertrekTijd() == null);
+			assertFalse(vlucht.getAankomstTijd() == null);
+		}catch(VluchtException e){
+			assertEquals("main.domeinLaag.VluchtException: Geen geldig tijdstip!", e.toString());
 		}
 	}
 
@@ -203,7 +203,7 @@ public class VluchtTest {
 			Calendar vertrektijd = Calendar.getInstance();
 			Calendar aankomsttijd = Calendar.getInstance();
 			aankomsttijd.add(Calendar.MINUTE, 1);
-			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=België, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
+			assertTrue("Vlucht [vluchtNummer=3, vt=null, bestemming=Luchthaven [naam=Tegel, code=TEG, werkPlaats=true, land=Land [naam=Belgiï¿½, code=32]], vertrekpunt=Luchthaven [naam=Schiphol, code=ASD, werkPlaats=true, land=Land [naam=Nederland, code=31]], vertrekTijd=null, aankomstTijd=null, duur=null]".equals(vlucht.toString()));
 		}catch(IllegalArgumentException e){
 
 		}
